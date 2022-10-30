@@ -5,7 +5,6 @@ import useDownloadImage from "hooks/useDownloadImage";
 export default function Home() {
   const [images, setImages] = useState([]);
   const { download } = useDownloadImage();
-  console.log(images);
 
   return (
     <div className="container">
