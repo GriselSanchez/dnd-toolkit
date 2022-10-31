@@ -270,17 +270,23 @@ export default function Monster() {
           <div style={{ maxHeight: "90vh", overflowY: "auto" }}>
             {monsters &&
               monsters.map((monster) => (
-                <div style={{ cursor: "pointer" }}>
-                  <hr />
+                <div
+                  style={{
+                    cursor: "pointer",
+                    background: "url(https://i.imgur.com/wAhINL9.jpg)",
+                  }}
+                >
+                  <div className="header" />
                   <div
+                    style={{ padding: 15 }}
                     onClick={() => {
                       setSelectedMonster(monster);
                     }}
                   >
                     <h2
                       style={{
-                        marginBottom: 0,
-                        color: "#9a1515",
+                        margin: 0,
+                        color: "#822000",
                         fontFamily: "Cinzel",
                         fontWeight: 700,
                         fontVariant: "small-caps",
@@ -289,18 +295,21 @@ export default function Monster() {
                       {monster.name}
                     </h2>
                     <i>{` ${monster.size} ${monster.type}, ${monster.alignment}`}</i>
-                    <p style={{ marginBottom: 0 }}>
-                      <b style={{ color: "#9a1515" }}>Armor Class </b>
+                    <svg height="5" width="100%" class="tapered-rule">
+                      <polyline points="0,0 400,2.5 0,5"></polyline>
+                    </svg>
+                    <p style={{ marginBottom: 0, color: "#822000" }}>
+                      <b>Armor Class </b>
                       {`${monster.armor_class} ${
                         monster.armor_desc ? `(${monster.armor_desc})` : ""
                       }`}
                     </p>
-                    <p style={{ marginBottom: 0 }}>
-                      <b style={{ color: "#9a1515" }}>Hit Points </b>
+                    <p style={{ marginBottom: 0, color: "#822000" }}>
+                      <b>Hit Points </b>
                       {`${monster.hit_points} (${monster.hit_dice})`}
                     </p>
-                    <p style={{ marginBottom: 0 }}>
-                      <b style={{ color: "#9a1515" }}>Challenge </b>
+                    <p style={{ marginBottom: 0, color: "#822000" }}>
+                      <b>Challenge </b>
                       {`${monster.challenge_rating} (${
                         cr[monster.challenge_rating].xp
                       } XP)`}
@@ -320,11 +329,17 @@ export default function Monster() {
           <div className="header" />
           <div style={{ padding: "15px" }}>
             {selectedMonster && (
-              <div style={{ columnCount: 2 }}>
+              <div
+                className="custom-cursor"
+                style={{
+                  columnCount: 2,
+                  columnGap: 25,
+                }}
+              >
                 <h1
                   style={{
                     margin: 0,
-                    color: "#9a1515",
+                    color: "#822000",
                     fontFamily: "Cinzel",
                     fontWeight: 700,
                     fontVariant: "small-caps",
@@ -341,8 +356,10 @@ export default function Monster() {
                     fontSize: 13,
                   }}
                 >{`${selectedMonster.size} ${selectedMonster.type}, ${selectedMonster.alignment}`}</p>
-                <hr />
-                <div style={{ color: "#9a1515" }}>
+                <svg height="5" width="100%" class="tapered-rule">
+                  <polyline points="0,0 400,2.5 0,5"></polyline>
+                </svg>
+                <div style={{ color: "#822000" }}>
                   <p>
                     <b>Armor Class </b>
                     {`${selectedMonster.armor_class} ${
@@ -381,7 +398,9 @@ export default function Monster() {
                     } 
               `}
                   </p>
-                  <hr />
+                  <svg height="5" width="100%" class="tapered-rule">
+                    <polyline points="0,0 400,2.5 0,5"></polyline>
+                  </svg>
                   <div
                     style={{
                       display: "flex",
@@ -396,7 +415,9 @@ export default function Monster() {
                     <Skill label="WIS" value={selectedMonster.wisdom} />
                     <Skill label="CHA" value={selectedMonster.charisma} />
                   </div>
-                  <hr />
+                  <svg height="5" width="100%" class="tapered-rule">
+                    <polyline points="0,0 400,2.5 0,5"></polyline>
+                  </svg>
                   <div>
                     <p>
                       <b>Skills </b>
@@ -454,14 +475,31 @@ export default function Monster() {
                       <b>Languages </b>
                       {selectedMonster.languages}
                     </p>
-                    <p>
-                      <b>Challenge </b>
-                      {`${selectedMonster.challenge_rating} (${
-                        cr[selectedMonster.challenge_rating].xp
-                      } XP)`}
-                    </p>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div>
+                        <p>
+                          <b>Challenge </b>
+                          {`${selectedMonster.challenge_rating} (${
+                            cr[selectedMonster.challenge_rating].xp
+                          } XP)`}
+                        </p>
+                      </div>
+                      <div>
+                        <p>
+                          <b>Proficiency Bonus </b>
+                          {`+ ${cr[selectedMonster.challenge_rating].prof}`}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <hr />
+                  <svg height="5" width="100%" class="tapered-rule">
+                    <polyline points="0,0 400,2.5 0,5"></polyline>
+                  </svg>
                 </div>
                 <div>
                   {selectedMonster.special_abilities &&
@@ -477,10 +515,10 @@ export default function Monster() {
                 <div>
                   <h3
                     style={{
-                      fontSize: 18,
+                      fontSize: 20,
                       paddingBottom: 5,
                       marginBottom: 15,
-                      color: "#9a1515",
+                      color: "#822000",
                       borderBottom: "1px solid #822000",
                     }}
                   >
@@ -499,10 +537,10 @@ export default function Monster() {
                 <div>
                   <h3
                     style={{
-                      fontSize: 18,
+                      fontSize: 20,
                       paddingBottom: 5,
                       marginBottom: 15,
-                      color: "#9a1515",
+                      color: "#822000",
                       borderBottom: "1px solid #822000",
                     }}
                   >
@@ -521,10 +559,10 @@ export default function Monster() {
                 <div>
                   <h3
                     style={{
-                      fontSize: 18,
+                      fontSize: 20,
                       paddingBottom: 5,
                       marginBottom: 15,
-                      color: "#9a1515",
+                      color: "#822000",
                       borderBottom: "1px solid #822000",
                     }}
                   >
