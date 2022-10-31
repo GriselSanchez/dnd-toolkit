@@ -295,7 +295,7 @@ export default function Monster() {
                       {monster.name}
                     </h2>
                     <i>{` ${monster.size} ${monster.type}, ${monster.alignment}`}</i>
-                    <svg height="5" width="100%" class="tapered-rule">
+                    <svg height="8" width="100%" class="tapered-rule">
                       <polyline points="0,0 400,2.5 0,5"></polyline>
                     </svg>
                     <p style={{ marginBottom: 0, color: "#822000" }}>
@@ -333,7 +333,6 @@ export default function Monster() {
                 className="custom-cursor"
                 style={{
                   columnCount: 2,
-                  columnGap: 25,
                 }}
               >
                 <h1
@@ -356,7 +355,7 @@ export default function Monster() {
                     fontSize: 13,
                   }}
                 >{`${selectedMonster.size} ${selectedMonster.type}, ${selectedMonster.alignment}`}</p>
-                <svg height="5" width="100%" class="tapered-rule">
+                <svg height="8" width="100%" class="tapered-rule">
                   <polyline points="0,0 400,2.5 0,5"></polyline>
                 </svg>
                 <div style={{ color: "#822000" }}>
@@ -398,7 +397,7 @@ export default function Monster() {
                     } 
               `}
                   </p>
-                  <svg height="5" width="100%" class="tapered-rule">
+                  <svg height="8" width="100%" class="tapered-rule">
                     <polyline points="0,0 400,2.5 0,5"></polyline>
                   </svg>
                   <div
@@ -415,7 +414,7 @@ export default function Monster() {
                     <Skill label="WIS" value={selectedMonster.wisdom} />
                     <Skill label="CHA" value={selectedMonster.charisma} />
                   </div>
-                  <svg height="5" width="100%" class="tapered-rule">
+                  <svg height="8" width="100%" class="tapered-rule">
                     <polyline points="0,0 400,2.5 0,5"></polyline>
                   </svg>
                   <div>
@@ -479,6 +478,7 @@ export default function Monster() {
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
+                        width: "95%",
                       }}
                     >
                       <div>
@@ -497,7 +497,7 @@ export default function Monster() {
                       </div>
                     </div>
                   </div>
-                  <svg height="5" width="100%" class="tapered-rule">
+                  <svg height="8" width="100%" class="tapered-rule">
                     <polyline points="0,0 400,2.5 0,5"></polyline>
                   </svg>
                 </div>
