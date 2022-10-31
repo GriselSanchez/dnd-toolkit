@@ -1,12 +1,144 @@
 import Skill from "@components/Skill";
 import { useEffect, useState } from "react";
 
-// TODO: get with formula
-const challenge_xp = [
-  200, 450, 700, 1100, 1800, 2300, 2900, 3900, 5000, 5900, 7200, 8400, 10000,
-  11500, 13000, 15000, 18000, 20000, 22000, 25000, 33000, 41000, 50000, 62000,
-  75000, 90000, 105000, 120000, 135000, 155000,
-];
+const cr = {
+  0: {
+    xp: "10",
+    prof: 2,
+  },
+  "1/8": {
+    xp: "25",
+    prof: 2,
+  },
+  "1/4": {
+    xp: "50",
+    prof: 2,
+  },
+  "1/2": {
+    xp: "100",
+    prof: 2,
+  },
+  1: {
+    xp: "200",
+    prof: 2,
+  },
+  2: {
+    xp: "450",
+    prof: 2,
+  },
+  3: {
+    xp: "700",
+    prof: 2,
+  },
+  4: {
+    xp: "1,100",
+    prof: 2,
+  },
+  5: {
+    xp: "1,800",
+    prof: 3,
+  },
+  6: {
+    xp: "2,300",
+    prof: 3,
+  },
+  7: {
+    xp: "2,900",
+    prof: 3,
+  },
+  8: {
+    xp: "3,900",
+    prof: 3,
+  },
+  9: {
+    xp: "5,000",
+    prof: 4,
+  },
+  10: {
+    xp: "5,900",
+    prof: 4,
+  },
+  11: {
+    xp: "7,200",
+    prof: 4,
+  },
+  12: {
+    xp: "8,400",
+    prof: 4,
+  },
+  13: {
+    xp: "10,000",
+    prof: 5,
+  },
+  14: {
+    xp: "11,500",
+    prof: 5,
+  },
+  15: {
+    xp: "13,000",
+    prof: 5,
+  },
+  16: {
+    xp: "15,000",
+    prof: 5,
+  },
+  17: {
+    xp: "18,000",
+    prof: 6,
+  },
+  18: {
+    xp: "20,000",
+    prof: 6,
+  },
+  19: {
+    xp: "22,000",
+    prof: 6,
+  },
+  20: {
+    xp: "25,000",
+    prof: 6,
+  },
+  21: {
+    xp: "33,000",
+    prof: 7,
+  },
+  22: {
+    xp: "41,000",
+    prof: 7,
+  },
+  23: {
+    xp: "50,000",
+    prof: 7,
+  },
+  24: {
+    xp: "62,000",
+    prof: 7,
+  },
+  25: {
+    xp: "75,000",
+    prof: 8,
+  },
+  26: {
+    xp: "90,000",
+    prof: 8,
+  },
+  27: {
+    xp: "105,000",
+    prof: 8,
+  },
+  28: {
+    xp: "120,000",
+    prof: 8,
+  },
+  29: {
+    xp: "135,000",
+    prof: 9,
+  },
+  30: {
+    xp: "155,000",
+    prof: 9,
+  },
+};
 
 export default function Monster() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,7 +146,7 @@ export default function Monster() {
   const [selectedMonster, setSelectedMonster] = useState();
   const [monsters, setMonsters] = useState([]);
 
-  const [monsterName, setMonsterName] = useState("");
+  // const [monsterName, setMonsterName] = useState("");
 
   const getMonsters = async (page = 1, size = 10) => {
     const res = await fetch(
@@ -43,6 +175,14 @@ export default function Monster() {
   const getMonsterByName = async (name) => {
     if (!name) return;
     const res = await fetch(`https://api.open5e.com/monsters?name=${name}`);
+    const monstersData = await res.json();
+    setMonsters(monstersData.results);
+    return monstersData;
+  };
+
+  const getMonsterByType = async (type) => {
+    if (!type) return;
+    const res = await fetch(`https://api.open5e.com/monsters?type=${type}`);
     const monstersData = await res.json();
     setMonsters(monstersData.results);
     return monstersData;
@@ -77,6 +217,7 @@ export default function Monster() {
           flexDirection: "row",
           alignItems: "flex-start",
           justifyContent: "flex-start",
+          backgroundColor: "#F4F3F1",
           gap: 50,
         }}
       >
@@ -84,7 +225,7 @@ export default function Monster() {
           <p>Start with an existing monster</p>
           <input
             placeholder="Name"
-            // onChange={async (e) => await getMonsterByName(e.target.value)}
+            onChange={async (e) => await getMonsterByName(e.target.value)}
           />
           <input
             placeholder="CR"
@@ -102,9 +243,31 @@ export default function Monster() {
           >
             Search
           </button> */}
-          {/* <select placeholder="Search by type"></select> */}
+          <select
+            placeholder="Type"
+            onChange={async (e) => await getMonsterByType(e.target.value)}
+          >
+            {[
+              "aberration",
+              "beast",
+              "celestial",
+              "construct",
+              "dragon",
+              "elemental",
+              "fey",
+              "fiend",
+              "giant",
+              "humanoid",
+              "monstrosity",
+              "ooze",
+              "plant",
+              "undead",
+            ].map((type) => (
+              <option value={type}>{type}</option>
+            ))}
+          </select>
           <button onClick={async () => await getRandomMonster()}>Random</button>
-          <div style={{ maxHeight: "100vh", overflowY: "auto" }}>
+          <div style={{ maxHeight: "90vh", overflowY: "auto" }}>
             {monsters &&
               monsters.map((monster) => (
                 <div style={{ cursor: "pointer" }}>
@@ -114,13 +277,23 @@ export default function Monster() {
                       setSelectedMonster(monster);
                     }}
                   >
-                    <h3 style={{ marginBottom: 5, color: "#9a1515" }}>
+                    <h2
+                      style={{
+                        marginBottom: 0,
+                        color: "#9a1515",
+                        fontFamily: "Cinzel",
+                        fontWeight: 700,
+                        fontVariant: "small-caps",
+                      }}
+                    >
                       {monster.name}
-                    </h3>
+                    </h2>
                     <i>{` ${monster.size} ${monster.type}, ${monster.alignment}`}</i>
                     <p style={{ marginBottom: 0 }}>
                       <b style={{ color: "#9a1515" }}>Armor Class </b>
-                      {monster.armor_class}
+                      {`${monster.armor_class} ${
+                        monster.armor_desc ? `(${monster.armor_desc})` : ""
+                      }`}
                     </p>
                     <p style={{ marginBottom: 0 }}>
                       <b style={{ color: "#9a1515" }}>Hit Points </b>
@@ -129,7 +302,7 @@ export default function Monster() {
                     <p style={{ marginBottom: 0 }}>
                       <b style={{ color: "#9a1515" }}>Challenge </b>
                       {`${monster.challenge_rating} (${
-                        challenge_xp[monster.challenge_rating - 1]
+                        cr[monster.challenge_rating].xp
                       } XP)`}
                     </p>
                   </div>
@@ -137,172 +310,243 @@ export default function Monster() {
               ))}
           </div>
         </div>
-        <div style={{ width: "40vw" }}>
-          {selectedMonster && (
-            <div>
-              <h1 style={{ marginBottom: 0, color: "#9a1515" }}>
-                {selectedMonster.name}
-              </h1>
-              <p
-                style={{ fontStyle: "italic", fontWeight: 300, marginTop: 5 }}
-              >{`${selectedMonster.size} ${selectedMonster.type}, ${selectedMonster.alignment}`}</p>
-              <hr />
-              <div>
-                <p>
-                  <b>Armor Class </b>
-                  {selectedMonster.armor_class}
-                </p>
-                <p>
-                  <b>Hit Points </b>
-                  {`${selectedMonster.hit_points} (${selectedMonster.hit_dice})`}
-                </p>
-                <p>
-                  <b>Speed </b>
-                  {`${
-                    selectedMonster.speed.walk
-                      ? `Walk ${selectedMonster.speed.walk}ft.`
-                      : ""
-                  } ${
-                    selectedMonster.speed.fly
-                      ? `Fly ${selectedMonster.speed.fly}ft.`
-                      : ""
-                  } ${selectedMonster.speed.hover ? "(hover)" : ""}
+        <div
+          style={{
+            width: "75vw",
+            boxShadow: "0 0 5px #979aa4",
+            background: "url(https://i.imgur.com/wAhINL9.jpg)",
+          }}
+        >
+          <div className="header" />
+          <div style={{ padding: "15px" }}>
+            {selectedMonster && (
+              <div style={{ columnCount: 2 }}>
+                <h1
+                  style={{
+                    margin: 0,
+                    color: "#9a1515",
+                    fontFamily: "Cinzel",
+                    fontWeight: 700,
+                    fontVariant: "small-caps",
+                    fontSize: 28,
+                  }}
+                >
+                  {selectedMonster.name}
+                </h1>
+                <p
+                  style={{
+                    fontStyle: "italic",
+                    marginTop: 0,
+                    textTransform: "capitalize",
+                    fontSize: 13,
+                  }}
+                >{`${selectedMonster.size} ${selectedMonster.type}, ${selectedMonster.alignment}`}</p>
+                <hr />
+                <div style={{ color: "#9a1515" }}>
+                  <p>
+                    <b>Armor Class </b>
+                    {`${selectedMonster.armor_class} ${
+                      selectedMonster.armor_desc
+                        ? `(${selectedMonster.armor_desc})`
+                        : ""
+                    }`}
+                  </p>
+                  <p>
+                    <b>Hit Points </b>
+                    {`${selectedMonster.hit_points} (${selectedMonster.hit_dice})`}
+                  </p>
+                  <p>
+                    <b>Speed </b>
+                    {`${
+                      selectedMonster.speed.walk
+                        ? `Walk ${selectedMonster.speed.walk}ft.`
+                        : ""
+                    } ${
+                      selectedMonster.speed.fly
+                        ? `Fly ${selectedMonster.speed.fly}ft.`
+                        : ""
+                    } ${selectedMonster.speed.hover ? "(hover)" : ""}
               ${
                 selectedMonster.speed.swim
                   ? `Swim ${selectedMonster.speed.swim}ft.`
                   : ""
-              } `}
-                </p>
-                <hr />
-                <div
-                  style={{ display: "flex", gap: 20, justifyContent: "center" }}
-                >
-                  <Skill label="STR" value={selectedMonster.strength} />
-                  <Skill label="DEX" value={selectedMonster.dexterity} />
-                  <Skill label="CON" value={selectedMonster.constitution} />
-                  <Skill label="INT" value={selectedMonster.intelligence} />
-                  <Skill label="WIS" value={selectedMonster.wisdom} />
-                  <Skill label="CHA" value={selectedMonster.charisma} />
+              } ${
+                      selectedMonster.speed.climb
+                        ? `Climb ${selectedMonster.speed.climb}ft.`
+                        : ""
+                    } ${
+                      selectedMonster.speed.burrow
+                        ? `Burrow ${selectedMonster.speed.burrow}ft.`
+                        : ""
+                    } 
+              `}
+                  </p>
+                  <hr />
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 20,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Skill label="STR" value={selectedMonster.strength} />
+                    <Skill label="DEX" value={selectedMonster.dexterity} />
+                    <Skill label="CON" value={selectedMonster.constitution} />
+                    <Skill label="INT" value={selectedMonster.intelligence} />
+                    <Skill label="WIS" value={selectedMonster.wisdom} />
+                    <Skill label="CHA" value={selectedMonster.charisma} />
+                  </div>
+                  <hr />
+                  <div>
+                    <p>
+                      <b>Skills </b>
+                      {Object.entries(selectedMonster.skills)
+                        .map(([key, value]) => {
+                          return `${key.charAt(0).toUpperCase()}${key.slice(
+                            1
+                          )} +${value}`;
+                        })
+                        .join(", ")}
+                    </p>
+                    <p>
+                      <b>Saving Throws </b>
+                      {[
+                        { label: "Str", value: selectedMonster.strength_save },
+                        { label: "Dex", value: selectedMonster.dexterity_save },
+                        {
+                          label: "Con",
+                          value: selectedMonster.constitution_save,
+                        },
+                        {
+                          label: "Int",
+                          value: selectedMonster.intelligence_save,
+                        },
+                        { label: "Wis", value: selectedMonster.wisdom_save },
+                        { label: "Cha", value: selectedMonster.charisma_save },
+                      ]
+                        .map(({ label, value }) =>
+                          value ? `${label} +${value}` : ""
+                        )
+                        .filter((value) => value !== "")
+                        .join(", ")}
+                    </p>
+                    <p>
+                      <b>Damage Vulnerabilities </b>
+                      {selectedMonster.damage_vulnerabilities}
+                    </p>
+                    <p>
+                      <b>Damage Resistances </b>
+                      {selectedMonster.damage_resistances}
+                    </p>
+                    <p>
+                      <b>Damage Immunities </b>
+                      {selectedMonster.damage_immunities}
+                    </p>
+                    <p>
+                      <b>Condition Immunities </b>
+                      {selectedMonster.condition_immunities}
+                    </p>
+                    <p>
+                      <b>Senses </b>
+                      {selectedMonster.senses}
+                    </p>
+                    <p>
+                      <b>Languages </b>
+                      {selectedMonster.languages}
+                    </p>
+                    <p>
+                      <b>Challenge </b>
+                      {`${selectedMonster.challenge_rating} (${
+                        cr[selectedMonster.challenge_rating].xp
+                      } XP)`}
+                    </p>
+                  </div>
+                  <hr />
                 </div>
-                <hr />
                 <div>
-                  <p>
-                    <b>Saving Throws </b>?
-                  </p>
-                  <p>
-                    <b>Skills </b>
-                    {Object.entries(selectedMonster.skills)
-                      .map(([key, value]) => {
-                        return `${key.charAt(0).toUpperCase()}${key.slice(
-                          1
-                        )} +${value}`;
-                      })
-                      .join(", ")}
-                  </p>
-                  <p>
-                    <b>Damage Vulnerabilities </b>
-                    {selectedMonster.damage_vulnerabilities}
-                  </p>
-                  <p>
-                    <b>Damage Resistances </b>
-                    {selectedMonster.damage_resistances}
-                  </p>
-                  <p>
-                    <b>Damage Immunities </b>
-                    {selectedMonster.damage_immunities}
-                  </p>
-                  <p>
-                    <b>Condition Immunities </b>
-                    {selectedMonster.condition_immunities}
-                  </p>
-                  <p>
-                    <b>Senses </b>
-                    {selectedMonster.senses}
-                  </p>
-                  <p>
-                    <b>Languages </b>
-                    {selectedMonster.languages}
-                  </p>
-                  <p>
-                    <b>Challenge </b>
-                    {`${selectedMonster.challenge_rating} (${
-                      challenge_xp[selectedMonster.challenge_rating - 1]
-                    } XP)`}
-                  </p>
+                  {selectedMonster.special_abilities &&
+                    selectedMonster.special_abilities.map((ability) => (
+                      <pre>
+                        <span style={{ fontWeight: 600, fontStyle: "italic" }}>
+                          {`${ability.name}.`}
+                        </span>{" "}
+                        {ability.desc}
+                      </pre>
+                    ))}
                 </div>
-                <hr />
+                <div>
+                  <h3
+                    style={{
+                      fontSize: 18,
+                      paddingBottom: 5,
+                      marginBottom: 15,
+                      color: "#9a1515",
+                      borderBottom: "1px solid #822000",
+                    }}
+                  >
+                    Actions
+                  </h3>
+                  {selectedMonster.actions &&
+                    selectedMonster.actions.map((action) => (
+                      <pre>
+                        <span style={{ fontWeight: 600, fontStyle: "italic" }}>
+                          {`${action.name}.`}
+                        </span>{" "}
+                        {action.desc}
+                      </pre>
+                    ))}
+                </div>
+                <div>
+                  <h3
+                    style={{
+                      fontSize: 18,
+                      paddingBottom: 5,
+                      marginBottom: 15,
+                      color: "#9a1515",
+                      borderBottom: "1px solid #822000",
+                    }}
+                  >
+                    Reactions
+                  </h3>
+                  {selectedMonster.reactions &&
+                    selectedMonster.reactions.map((reaction) => (
+                      <pre>
+                        <span style={{ fontWeight: 600, fontStyle: "italic" }}>
+                          {`${reaction.name}.`}
+                        </span>{" "}
+                        {reaction.desc}
+                      </pre>
+                    ))}
+                </div>
+                <div>
+                  <h3
+                    style={{
+                      fontSize: 18,
+                      paddingBottom: 5,
+                      marginBottom: 15,
+                      color: "#9a1515",
+                      borderBottom: "1px solid #822000",
+                    }}
+                  >
+                    Legendary Actions
+                  </h3>
+                  <p style={{ fontStyle: "italic", fontWeight: 300 }}>
+                    {selectedMonster.legendary_desc}
+                  </p>
+                  {selectedMonster.legendary_actions &&
+                    selectedMonster.legendary_actions.map((action) => (
+                      <pre>
+                        <span style={{ fontWeight: 600, fontStyle: "italic" }}>
+                          {`${action.name}.`}
+                        </span>{" "}
+                        {action.desc}
+                      </pre>
+                    ))}
+                </div>
               </div>
-              <div>
-                {selectedMonster.special_abilities &&
-                  selectedMonster.special_abilities.map((ability) => (
-                    <div>
-                      <b style={{ fontStyle: "italic" }}>{ability.name}</b>
-                      <p>{ability.desc}</p>
-                    </div>
-                  ))}
-              </div>
-              <div>
-                <h3
-                  style={{
-                    fontSize: 22,
-                    marginBottom: 0,
-                    color: "#9a1515",
-                  }}
-                >
-                  Actions
-                </h3>
-                <hr />
-                {selectedMonster.actions &&
-                  selectedMonster.actions.map((action) => (
-                    <div>
-                      <b style={{ fontStyle: "italic" }}>{action.name}</b>
-                      <p>{action.desc}</p>
-                    </div>
-                  ))}
-              </div>
-              <div>
-                <h3
-                  style={{
-                    fontSize: 22,
-                    marginBottom: 0,
-                    color: "#9a1515",
-                  }}
-                >
-                  Reactions
-                </h3>
-                <hr />
-                {selectedMonster.reactions &&
-                  selectedMonster.reactions.map((reaction) => (
-                    <div>
-                      <b style={{ fontStyle: "italic" }}>{reaction.name}</b>
-                      <p>{reaction.desc}</p>
-                    </div>
-                  ))}
-              </div>
-              <div>
-                <h3
-                  style={{
-                    fontSize: 22,
-                    marginBottom: 0,
-                    color: "#9a1515",
-                  }}
-                >
-                  Legendary Actions
-                </h3>
-                <hr />
-                <p style={{ fontStyle: "italic", fontWeight: 300 }}>
-                  {selectedMonster.legendary_desc}
-                </p>
-                {selectedMonster.legendary_actions &&
-                  selectedMonster.legendary_actions.map((action) => (
-                    <div>
-                      <b style={{ fontStyle: "italic" }}>{action.name}</b>
-                      <p>{action.desc}</p>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          )}
+            )}
+          </div>
+          <div className="header" />
         </div>
       </main>
     </div>
