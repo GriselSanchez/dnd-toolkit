@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { MonsterCard } from "./components";
+import { MonsterCard, MonsterCardsContainer } from "./components";
 import { MONSTER } from "../../constants";
 import { useGetAllMonsters } from "../../hooks";
 import { MonsterPreview, IGetAllMonstersFilters } from "../../types";
@@ -57,14 +57,15 @@ const SearchBar = ({ selectedMonster, setSelectedMonster }: Props) => {
         ))}
       </select>
       <button onClick={() => getRandomMonster()}>Random</button>
-      <div style={{ maxHeight: "90vh", overflowY: "auto" }}>
+      <MonsterCardsContainer>
         {results.map((monster) => (
           <MonsterCard
+            key={monster.slug}
             monster={monster}
             setSelectedMonster={setSelectedMonster}
           />
         ))}
-      </div>
+      </MonsterCardsContainer>
     </div>
   );
 };

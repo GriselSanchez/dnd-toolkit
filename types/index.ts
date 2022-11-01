@@ -89,6 +89,16 @@ export type MonsterPreview = Pick<
   | "hit_dice"
 >;
 
+export type Stat = Pick<
+  IMonster,
+  | "strength"
+  | "dexterity"
+  | "constitution"
+  | "intelligence"
+  | "wisdom"
+  | "charisma"
+>;
+
 export interface IGetAllMonstersFilters {
   name?: string;
   challenge_rating?: string;

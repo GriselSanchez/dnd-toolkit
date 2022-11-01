@@ -11,44 +11,16 @@ pre {
 }
 
 p,
-pre,
-i {
+pre {
   font-family: "Lora", serif;
   font-weight: 400;
   font-size: 14px;
   margin: 5px 0;
 }
 
-b {
-  font-family: "Lora", serif;
-  font-weight: 600;
-  font-size: 14px;
-}
-
 h3 {
   font-family: "Lora", serif;
   font-weight: 400;
-}
-
-.header {
-  height: 0.4em;
-  min-height: 3px;
-  background: #bd9b4c;
-  border: 1px solid black;
-  border-left: 0;
-  border-right: 0;
-  width: 100%;
-  background-image: linear-gradient(
-    45deg,
-    #bd9b4c 25%,
-    #b38720 25%,
-    #b38720 50%,
-    #bd9b4c 50%,
-    #bd9b4c 75%,
-    #b38720 75%,
-    #b38720 100%
-  );
-  background-size: 5px 5px;
 }
 
 hr {
