@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 
+import { MonsterCard } from "./components";
 import { MONSTER } from "../../constants";
 import { useGetAllMonsters } from "../../hooks";
 import { MonsterPreview, IGetAllMonstersFilters } from "../../types";
-import { MathUtils } from "../../utils";
-import { StringUtils } from "../../utils/string";
-import { MonsterCard } from "./components";
+import { MathUtils, StringUtils } from "../../utils";
 
 interface Props {
   selectedMonster: MonsterPreview;
