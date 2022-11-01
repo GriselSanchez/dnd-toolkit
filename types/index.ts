@@ -88,3 +88,9 @@ export type MonsterPreview = Pick<
   | "armor_desc"
   | "hit_dice"
 >;
+
+export interface IGetAllMonstersFilters {
+  name?: string;
+  challenge_rating?: string;
+  type?: string;
+}

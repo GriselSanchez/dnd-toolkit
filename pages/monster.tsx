@@ -1,32 +1,14 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import { Skill } from "../components";
-import { CHALLENGE_RATINGS } from "../constants";
-import useGetAllMonsters from "../hooks/useGetAllMonsters";
+import { Search, Skill } from "../components";
+import { MONSTER } from "../constants";
 import useGetMonsterBySlug from "../hooks/useGetMonsterBySlug";
 import { MonsterPreview } from "../types";
 
 export default function Monster() {
   const [selectedMonster, setSelectedMonster] = useState<MonsterPreview>();
-  const [filters, setFilters] = useState<{ name: string }>({ name: "" });
 
-  const { results, count } = useGetAllMonsters(filters);
-  const { monster } = useGetMonsterBySlug(
-    selectedMonster?.slug ?? (results.length > 0 && results[0].slug)
-  );
-
-  // TODO: get random in filtered data
-  const generateRandomIndex = () => {
-    if (count) {
-      return Math.floor(Math.random() * count) + 1;
-    }
-  };
-
-  const getRandomMonster = async () => {
-    const index = generateRandomIndex();
-    const newSelectedMonster = results[index];
-    setSelectedMonster(newSelectedMonster);
-  };
+  const { monster } = useGetMonsterBySlug(selectedMonster?.slug);
 
   return (
     <div>
@@ -41,107 +23,10 @@ export default function Monster() {
           gap: 50,
         }}
       >
-        <div>
-          <p>Start with an existing monster</p>
-          <input
-            placeholder="Name"
-            onChange={(e) =>
-              setFilters((prev) => ({ ...prev, name: e.target.value }))
-            }
-          />
-          <input
-            placeholder="CR"
-            // onChange={async (e) => await getMonsterByCR(e.target.value)}
-          />
-          {/* <button
-            onClick={() => {
-              console.log(monsterName);
-              setMonsters([
-                ...monsters.filter((monster) =>
-                  monster.name.includes(monsterName)
-                ),
-              ]);
-            }}
-          >
-            Search
-          </button> */}
-          <select
-            placeholder="Type"
-            // onChange={async (e) => await getMonsterByType(e.target.value)}
-          >
-            {[
-              "aberration",
-              "beast",
-              "celestial",
-              "construct",
-              "dragon",
-              "elemental",
-              "fey",
-              "fiend",
-              "giant",
-              "humanoid",
-              "monstrosity",
-              "ooze",
-              "plant",
-              "undead",
-            ].map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-          <button onClick={() => getRandomMonster()}>Random</button>
-          <div style={{ maxHeight: "90vh", overflowY: "auto" }}>
-            {results.map((monster) => (
-              <div
-                style={{
-                  cursor: "pointer",
-                  background: "url(https://i.imgur.com/wAhINL9.jpg)",
-                }}
-              >
-                <div className="header" />
-                <div
-                  style={{ padding: 15 }}
-                  onClick={() => {
-                    setSelectedMonster(monster);
-                  }}
-                >
-                  <h2
-                    style={{
-                      margin: 0,
-                      color: "#822000",
-                      fontFamily: "Cinzel",
-                      fontWeight: 700,
-                      fontVariant: "small-caps",
-                    }}
-                  >
-                    {monster.name}
-                  </h2>
-                  <i>{` ${monster.size} ${monster.type}, ${monster.alignment}`}</i>
-                  <svg height="8" width="100%" className="tapered-rule">
-                    <polyline points="0,0 400,2.5 0,5"></polyline>
-                  </svg>
-                  <p style={{ marginBottom: 0, color: "#822000" }}>
-                    <b>Armor Class </b>
-                    {`${monster.armor_class} ${
-                      monster.armor_desc ? `(${monster.armor_desc})` : ""
-                    }`}
-                  </p>
-                  <p style={{ marginBottom: 0, color: "#822000" }}>
-                    <b>Hit Points </b>
-                    {`${monster.hit_points} (${monster.hit_dice})`}
-                  </p>
-                  <p style={{ marginBottom: 0, color: "#822000" }}>
-                    <b>Challenge </b>
-                    {`${monster.challenge_rating} (${
-                      CHALLENGE_RATINGS[monster.challenge_rating].xp
-                    } XP)`}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <Search
+          selectedMonster={selectedMonster}
+          setSelectedMonster={setSelectedMonster}
+        />
         <div
           style={{
             width: "75vw",
@@ -194,21 +79,23 @@ export default function Monster() {
                   </p>
                   <p>
                     <b>Speed </b>
-                    {/* {`${
-                      monster.speed.walk ? `Walk ${monster.speed.walk}ft.` : ""
-                    } ${
-                      monster.speed.fly ? `Fly ${monster.speed.fly}ft.` : ""
-                    } ${monster.speed.hover ? "(hover)" : ""}
-              ${monster.speed.swim ? `Swim ${monster.speed.swim}ft.` : ""} ${
-                      monster.speed.climb
-                        ? `Climb ${monster.speed.climb}ft.`
-                        : ""
-                    } ${
-                      monster.speed.burrow
-                        ? `Burrow ${monster.speed.burrow}ft.`
-                        : ""
-                    } 
-              `} */}
+                    {Object.entries(monster.speed).map(([key, value]) => {
+                      const hoverProp =
+                        monster.speed.hasOwnProperty("hover") &&
+                        key === "swim" &&
+                        monster.speed.hover
+                          ? "(hover)"
+                          : "";
+                      return `${
+                        monster.speed.hasOwnProperty(key)
+                          ? `${key.charAt(0).toUpperCase()}${key.slice(
+                              1
+                            )} ${value}ft.`
+                          : ""
+                      }
+                        ${hoverProp}
+                      `;
+                    })}
                   </p>
                   <svg height="8" width="100%" className="tapered-rule">
                     <polyline points="0,0 400,2.5 0,5"></polyline>
@@ -299,7 +186,8 @@ export default function Monster() {
                         <p>
                           <b>Challenge </b>
                           {`${monster.challenge_rating} (${
-                            CHALLENGE_RATINGS[monster.challenge_rating].xp
+                            MONSTER.CHALLENGE_RATINGS[monster.challenge_rating]
+                              .xp
                           } XP)`}
                         </p>
                       </div>
@@ -307,7 +195,8 @@ export default function Monster() {
                         <p>
                           <b>Proficiency Bonus </b>
                           {`+ ${
-                            CHALLENGE_RATINGS[monster.challenge_rating].prof
+                            MONSTER.CHALLENGE_RATINGS[monster.challenge_rating]
+                              .prof
                           }`}
                         </p>
                       </div>
