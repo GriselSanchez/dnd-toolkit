@@ -14,11 +14,11 @@ const getAllMonsters = async (
 ): Promise<IGetAllMonstersResponse> => {
   const formattedFilters =
     StringUtils.getQueryParamsFromObject<IGetAllMonstersFilters>(filters);
+  // TODO: get fields from type
   const response = await fetch(
     `https://api.open5e.com/monsters/?fields=slug,name,challenge_rating,type,size,hit_points,alignment,armor_class,armor_desc,hit_dice&limit=2000&ordering=slug&${formattedFilters}`
   );
   const data = await response.json();
-
   return data;
 };
 
@@ -40,4 +40,4 @@ const useGetAllMonsters = ({ filters }: Props) => {
   return { results: filteredResults ?? [], count: data?.count ?? 0 };
 };
 
-export default useGetAllMonsters;
+export { useGetAllMonsters };

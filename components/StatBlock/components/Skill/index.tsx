@@ -1,6 +1,6 @@
 import React from "react";
 
-import { MONSTER } from "../../constants";
+import { MONSTER } from "../../../../constants";
 
 const Skill = ({ label, value }) => {
   const modifier = MONSTER.STAT_MODIFIERS[value - 1];

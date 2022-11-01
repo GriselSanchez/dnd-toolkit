@@ -1,2 +1,2 @@
-export { default as Skill } from "./Skill";
 export { default as Search } from "./Search";
+export { default as StatBlock } from "./StatBlock";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { MONSTER } from "../../constants";
-import useGetAllMonsters from "../../hooks/useGetAllMonsters";
+import { useGetAllMonsters } from "../../hooks";
 import { MonsterPreview, IGetAllMonstersFilters } from "../../types";
 import { MathUtils } from "../../utils";
 import { StringUtils } from "../../utils/string";

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import html2canvas from "html2canvas";
 
-export default function downloaduseDownloadImage() {
+const useDownloadImage = () => {
   const [loading, setLoading] = useState(false);
 
-  const downloadImage = (blob, fileName) => {
+  const downloadImage = (blob: string, fileName: string) => {
     const fakeLink = window.document.createElement("a");
-    fakeLink.style = "display:none;";
+    fakeLink.style.display = "none";
     fakeLink.download = fileName;
 
     fakeLink.href = blob;
@@ -26,18 +26,20 @@ export default function downloaduseDownloadImage() {
     setLoading(false);
   };
 
-  const download = (element, imageFileName) => {
-    startDownload(element);
+  const download = (element: HTMLElement, imageFileName: string) => {
+    startDownload();
     html2canvas(element, { scale: 10 })
       .then((canvas) => {
         const image = canvas.toDataURL("image/png", 10.0);
         downloadImage(image, imageFileName);
-        finishDownload(element);
+        finishDownload();
       })
       .catch(() => {
-        finishDownload(element);
+        finishDownload();
       });
   };
 
   return { download, loading };
-}
+};
+
+export { useDownloadImage };
