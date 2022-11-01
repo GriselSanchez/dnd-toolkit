@@ -38,7 +38,10 @@ export default function Home() {
                 }}
               />
               <img
-                style={{ height: 350, transform: "scaleX(-1) rotateZ(180deg)" }}
+                style={{
+                  height: 350,
+                  transform: "scaleX(-1) rotateZ(180deg)",
+                }}
                 src={image}
               />
             </div>
