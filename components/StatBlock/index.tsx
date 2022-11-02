@@ -5,7 +5,6 @@ import { IMonster } from "../../types";
 import { StringUtils } from "../../utils";
 import {
   CardBody,
-  CardContainer,
   CardDivider,
   CardHeader,
   CardInfo,
@@ -13,6 +12,7 @@ import {
   CardSubtitle,
   CardTitle,
 } from "../5eCard";
+import { StyledCardContainer } from "./components";
 
 interface Props {
   monster?: IMonster;
@@ -39,19 +39,13 @@ const StatBlock = ({ monster }: Props) => {
   } = { ...monster };
 
   return (
-    <CardContainer
-    // style={{
-    //   width: "75vw",
-    //   boxShadow: "0 0 5px #979aa4",
-    // }}
-    >
+    <StyledCardContainer>
       <CardHeader />
       {monster && (
         <CardBody>
           <CardTitle name={name} />
           <CardSubtitle size={size} type={type} alignment={alignment} />
           <CardDivider />
-
           <div>
             <CardInfo
               label="Armor Class"
@@ -61,24 +55,28 @@ const StatBlock = ({ monster }: Props) => {
               label="Hit Points"
               value={`${hit_points} (${hit_dice})`}
             />
-            {/* <CardInfo
-            label="Speed"
-            value={Object.entries(monster.speed).map(([key, value]) => {
-              const hoverProp =
-                monster.speed.hasOwnProperty("hover") &&
-                key === "swim" &&
-                monster.speed.hover
-                  ? "(hover)"
-                  : "";
-              return `${
-                monster.speed.hasOwnProperty(key)
-                  ? `${key.charAt(0).toUpperCase()}${key.slice(1)} ${value}ft.`
-                  : ""
-              }
+            <CardInfo
+              label="Speed"
+              value={Object.entries(monster.speed)
+                .map(([key, value]) => {
+                  const hoverProp =
+                    monster.speed.hasOwnProperty("hover") &&
+                    key === "swim" &&
+                    monster.speed.hover
+                      ? "(hover)"
+                      : "";
+                  return `${
+                    monster.speed.hasOwnProperty(key)
+                      ? `${key.charAt(0).toUpperCase()}${key.slice(
+                          1
+                        )} ${value}ft.`
+                      : ""
+                  }
                   ${hoverProp}
                 `;
-            })}
-          /> */}
+                })
+                .join(" ")}
+            />
             <CardDivider />
             <div
               style={{
@@ -97,19 +95,21 @@ const StatBlock = ({ monster }: Props) => {
             </div>
             <CardDivider />
             <div>
-              <p>
-                <b>Skills </b>
-                {skills &&
+              <CardInfo
+                label="Skills"
+                value={
+                  skills &&
                   Object.entries(skills)
                     .map(
                       ([key, value]) =>
                         `${StringUtils.formatToUpperFirstLetter(key)} +${value}`
                     )
-                    .join(", ")}
-              </p>
-              <p>
-                <b>Saving Throws </b>
-                {STAT.NAMES.map((name) => {
+                    .join(", ")
+                }
+              />
+              <CardInfo
+                label="Saving Throws"
+                value={STAT.NAMES.map((name) => {
                   const value = monster[`${name}_save`];
                   const label = StringUtils.formatToUpperFirstLetter(
                     name
@@ -118,31 +118,19 @@ const StatBlock = ({ monster }: Props) => {
                 })
                   .filter((value) => value !== "")
                   .join(", ")}
-              </p>
-              <p>
-                <b>Damage Vulnerabilities </b>
-                {damage_vulnerabilities}
-              </p>
-              <p>
-                <b>Damage Resistances </b>
-                {damage_resistances}
-              </p>
-              <p>
-                <b>Damage Immunities </b>
-                {damage_immunities}
-              </p>
-              <p>
-                <b>Condition Immunities </b>
-                {condition_immunities}
-              </p>
-              <p>
-                <b>Senses </b>
-                {senses}
-              </p>
-              <p>
-                <b>Languages </b>
-                {languages}
-              </p>
+              />
+              <CardInfo
+                label="Damage Vulnerabilities"
+                value={damage_vulnerabilities}
+              />
+              <CardInfo label="Damage Resistances" value={damage_resistances} />
+              <CardInfo label="Damage Immunities" value={damage_immunities} />
+              <CardInfo
+                label="Condition Immunities"
+                value={condition_immunities}
+              />
+              <CardInfo label="Senses" value={senses} />
+              <CardInfo label="Languages" value={languages} />
               <div
                 style={{
                   display: "flex",
@@ -150,18 +138,14 @@ const StatBlock = ({ monster }: Props) => {
                   width: "95%",
                 }}
               >
-                <div>
-                  <p>
-                    <b>Challenge </b>
-                    {`${challenge_rating} (${MONSTER.CHALLENGE_RATINGS[challenge_rating].xp} XP)`}
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    <b>Proficiency Bonus </b>
-                    {`+ ${MONSTER.CHALLENGE_RATINGS[challenge_rating].prof}`}
-                  </p>
-                </div>
+                <CardInfo
+                  label="Challenge"
+                  value={`${challenge_rating} (${MONSTER.CHALLENGE_RATINGS[challenge_rating].xp} XP)`}
+                />
+                <CardInfo
+                  label="Proficiency Bonus"
+                  value={`+ ${MONSTER.CHALLENGE_RATINGS[challenge_rating].prof}`}
+                />
               </div>
             </div>
             <CardDivider />
@@ -249,7 +233,7 @@ const StatBlock = ({ monster }: Props) => {
         </CardBody>
       )}
       <CardHeader />
-    </CardContainer>
+    </StyledCardContainer>
   );
 };
 
