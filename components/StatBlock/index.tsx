@@ -1,24 +1,30 @@
 import React from "react";
 
 import { MONSTER, STAT } from "../../constants";
-import { IMonster } from "../../types";
-import { StringUtils } from "../../utils";
+import { useGetMonsterBySlug } from "../../hooks";
+import { MonsterPreview } from "../../types";
 import {
   CardBody,
   CardDivider,
   CardHeader,
   CardInfo,
   CardStat,
+  CardStatContainer,
   CardSubtitle,
   CardTitle,
+  ChallengeContainer,
 } from "../5eCard";
 import { StyledCardContainer } from "./components";
 
 interface Props {
-  monster?: IMonster;
+  selectedMonster?: MonsterPreview;
 }
 
-const StatBlock = ({ monster }: Props) => {
+const StatBlock = ({ selectedMonster }: Props) => {
+  const { formattedMonster: monster } = useGetMonsterBySlug(
+    selectedMonster?.slug
+  );
+
   const {
     name,
     size,
@@ -28,8 +34,10 @@ const StatBlock = ({ monster }: Props) => {
     armor_desc,
     hit_points,
     hit_dice,
+    speed,
     challenge_rating,
     skills,
+    saving_throws,
     damage_vulnerabilities,
     damage_resistances,
     damage_immunities,
@@ -55,105 +63,48 @@ const StatBlock = ({ monster }: Props) => {
               label="Hit Points"
               value={`${hit_points} (${hit_dice})`}
             />
-            <CardInfo
-              label="Speed"
-              value={Object.entries(monster.speed)
-                .map(([key, value]) => {
-                  const hoverProp =
-                    monster.speed.hasOwnProperty("hover") &&
-                    key === "swim" &&
-                    monster.speed.hover
-                      ? "(hover)"
-                      : "";
-                  return `${
-                    monster.speed.hasOwnProperty(key)
-                      ? `${key.charAt(0).toUpperCase()}${key.slice(
-                          1
-                        )} ${value}ft.`
-                      : ""
-                  }
-                  ${hoverProp}
-                `;
-                })
-                .join(" ")}
-            />
+            <CardInfo label="Speed" value={speed} />
             <CardDivider />
-            <div
-              style={{
-                display: "flex",
-                gap: 20,
-                justifyContent: "center",
-              }}
-            >
+            <CardStatContainer>
               {STAT.NAMES.map((name) => (
                 <CardStat
-                  key={`${monster.name}-${name}`}
+                  key={`${name}-${name}`}
                   name={name}
                   monster={monster}
                 />
               ))}
-            </div>
+            </CardStatContainer>
             <CardDivider />
-            <div>
+            <CardInfo label="Skills" value={skills} />
+            <CardInfo label="Saving Throws" value={saving_throws} />
+            <CardInfo
+              label="Damage Vulnerabilities"
+              value={damage_vulnerabilities}
+            />
+            <CardInfo label="Damage Resistances" value={damage_resistances} />
+            <CardInfo label="Damage Immunities" value={damage_immunities} />
+            <CardInfo
+              label="Condition Immunities"
+              value={condition_immunities}
+            />
+            <CardInfo label="Senses" value={senses} />
+            <CardInfo label="Languages" value={languages} />
+            <ChallengeContainer>
               <CardInfo
-                label="Skills"
-                value={
-                  skills &&
-                  Object.entries(skills)
-                    .map(
-                      ([key, value]) =>
-                        `${StringUtils.formatToUpperFirstLetter(key)} +${value}`
-                    )
-                    .join(", ")
-                }
+                label="Challenge"
+                value={`${challenge_rating} (${MONSTER.CHALLENGE_RATINGS[challenge_rating].xp} XP)`}
               />
               <CardInfo
-                label="Saving Throws"
-                value={STAT.NAMES.map((name) => {
-                  const value = monster[`${name}_save`];
-                  const label = StringUtils.formatToUpperFirstLetter(
-                    name
-                  ).slice(0, 3);
-                  return value ? `${label} +${value}` : "";
-                })
-                  .filter((value) => value !== "")
-                  .join(", ")}
+                label="Proficiency Bonus"
+                value={`+ ${MONSTER.CHALLENGE_RATINGS[challenge_rating].prof}`}
               />
-              <CardInfo
-                label="Damage Vulnerabilities"
-                value={damage_vulnerabilities}
-              />
-              <CardInfo label="Damage Resistances" value={damage_resistances} />
-              <CardInfo label="Damage Immunities" value={damage_immunities} />
-              <CardInfo
-                label="Condition Immunities"
-                value={condition_immunities}
-              />
-              <CardInfo label="Senses" value={senses} />
-              <CardInfo label="Languages" value={languages} />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "95%",
-                }}
-              >
-                <CardInfo
-                  label="Challenge"
-                  value={`${challenge_rating} (${MONSTER.CHALLENGE_RATINGS[challenge_rating].xp} XP)`}
-                />
-                <CardInfo
-                  label="Proficiency Bonus"
-                  value={`+ ${MONSTER.CHALLENGE_RATINGS[challenge_rating].prof}`}
-                />
-              </div>
-            </div>
+            </ChallengeContainer>
             <CardDivider />
           </div>
           <div>
             {monster.special_abilities &&
               monster.special_abilities.map((ability) => (
-                <pre>
+                <pre key={ability.name}>
                   <span style={{ fontWeight: 600, fontStyle: "italic" }}>
                     {`${ability.name}.`}
                   </span>{" "}
@@ -175,7 +126,7 @@ const StatBlock = ({ monster }: Props) => {
             </h3>
             {monster.actions &&
               monster.actions.map((action) => (
-                <pre>
+                <pre key={action.name}>
                   <span style={{ fontWeight: 600, fontStyle: "italic" }}>
                     {`${action.name}.`}
                   </span>{" "}
@@ -197,7 +148,7 @@ const StatBlock = ({ monster }: Props) => {
             </h3>
             {monster.reactions &&
               monster.reactions.map((reaction) => (
-                <pre>
+                <pre key={reaction.name}>
                   <span style={{ fontWeight: 600, fontStyle: "italic" }}>
                     {`${reaction.name}.`}
                   </span>{" "}
@@ -222,7 +173,7 @@ const StatBlock = ({ monster }: Props) => {
             </p>
             {monster.legendary_actions &&
               monster.legendary_actions.map((action) => (
-                <pre>
+                <pre key={action.name}>
                   <span style={{ fontWeight: 600, fontStyle: "italic" }}>
                     {`${action.name}.`}
                   </span>{" "}

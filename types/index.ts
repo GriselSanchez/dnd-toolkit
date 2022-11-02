@@ -75,6 +75,14 @@ export interface IMonster {
   document__license_url: string;
 }
 
+export type FormattedMonster =
+  | {
+      speed: string;
+      skills: string;
+      saving_throws: string;
+    }
+  | IMonster;
+
 export type MonsterPreview = Pick<
   IMonster,
   | "slug"

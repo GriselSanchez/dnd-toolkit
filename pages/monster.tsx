@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 
 import { Search, StatBlock } from "../components";
-import { useGetMonsterBySlug } from "../hooks";
 import { MonsterPreview } from "../types";
 
 export default function Monster() {
   const [selectedMonster, setSelectedMonster] = useState<MonsterPreview>();
-  const { monster } = useGetMonsterBySlug(selectedMonster?.slug);
 
   return (
     <div>
@@ -25,7 +23,7 @@ export default function Monster() {
           selectedMonster={selectedMonster}
           setSelectedMonster={setSelectedMonster}
         />
-        <StatBlock monster={monster} />
+        <StatBlock selectedMonster={selectedMonster} />
       </main>
     </div>
   );

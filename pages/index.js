@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Head from "next/head";
+import Image from "next/image";
 
 import { useDownloadImage } from "../hooks";
 
@@ -30,7 +31,7 @@ export default function Home() {
         <div className="grid">
           {images.map((image) => (
             <div className="image-to-download" key={image}>
-              <img style={{ height: 350 }} src={image} />
+              <Image alt={image} style={{ height: 350 }} src={image} />
               <div
                 style={{
                   width: "100%",
@@ -38,7 +39,8 @@ export default function Home() {
                   backgroundColor: "black",
                 }}
               />
-              <img
+              <Image
+                alt={image}
                 style={{
                   height: 350,
                   transform: "scaleX(-1) rotateZ(180deg)",

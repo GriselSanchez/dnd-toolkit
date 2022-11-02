@@ -2,7 +2,7 @@ import React from "react";
 
 import { STAT } from "../../../constants";
 import { styled } from "../../../stitches.config";
-import { IMonster, Stat } from "../../../types";
+import { FormattedMonster, Stat } from "../../../types";
 
 const Container = styled("div", {
   alignItems: "center",
@@ -15,7 +15,7 @@ const Container = styled("div", {
 
 interface Props {
   name: keyof Stat;
-  monster: IMonster;
+  monster: FormattedMonster;
 }
 
 const CardStat = ({ name, monster }: Props) => {

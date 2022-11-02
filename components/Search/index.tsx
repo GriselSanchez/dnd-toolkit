@@ -17,7 +17,7 @@ const SearchBar = ({ selectedMonster, setSelectedMonster }: Props) => {
 
   useEffect(() => {
     if (!selectedMonster && results.length > 0) setSelectedMonster(results[0]);
-  }, [selectedMonster, setSelectedMonster, results.length]);
+  }, [selectedMonster, setSelectedMonster, results]);
 
   const getRandomMonster = () => {
     // TODO: get random in filtered data
